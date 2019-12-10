@@ -33,7 +33,6 @@ client.on('message', (receivedMessage) => {
     // Prevent bot from responding to its own messages
     if (receivedMessage.content.substr(0, 5) == "!roll") {
         var dice = receivedMessage.content.substr(6);
-        receivedMessage.channel.send(dice.substr(dice.indexOf('d')+1,dice.indexOf('+')-3));
         var roll = 0;
         if (dice.charAt(0) == 'd' || dice.charAt(0) == 'D') {
             var diceSize;
