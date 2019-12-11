@@ -41,6 +41,22 @@ function formatDiceSize(dice) {//like d20+1 or d20
     }
     return diceSize;
 }
+function outsidePerenth(roll,oporator,num){//returns addedValue instead of roll so it can return 0 if it fails 
+    var addedValue = 0;
+    if(oporator == "*"){//*
+        addedValue = (roll * num) - roll;
+    }
+    else if(oporator == "+"){// +
+        addedValue = (roll + num) - roll;
+    }
+    else if(oporator == "/"){// /
+        addedValue = (roll / num) - roll;
+    }
+    else if(oporator == "-"){// -
+        addedValue = (roll - num) - roll;
+    }
+    return addedValue;
+}
 const Discord = require('discord.js');
 const client = new Discord.Client();
 const auth = require('./auth.json');
@@ -59,13 +75,20 @@ client.on('message', (receivedMessage) => {
                 t--;
             }
         }
+        var diceOutput = "[";
         dice = dice.toLowerCase();
-        receivedMessage.channel.send(dice);
+        var diceOrg;
+        if(dice.indexOf('(') != -1 && dice.indexOf(')') != -1){
+            //receivedMessage.channel.send(dice.substr(dice.indexOf('(')+1,dice.indexOf(')')-1));
+            diceOrg = dice;
+            dice = dice.substr(dice.indexOf('(')+1,dice.indexOf(')')-1);
+            diceOutput += "(";
+        }
         var diceArray = dice.split('+');
         var roll = 0;
-        var diceOutput = "[";
         var newRoll;
         for (a = 0; a < diceArray.length; a++) {
+            diceArray[a] = diceArray[a].trim();
             if (diceArray[a].charAt(0) == 'd' || diceArray[a].charAt(0) == 'D') {
                 diceArray[a].replace(" ","");
                 newRoll = makeRoll(formatDiceSize(diceArray[a]));
@@ -92,11 +115,26 @@ client.on('message', (receivedMessage) => {
             }
             diceOutput += ((a < diceArray.length - 1) ? '+' : '');
         }
-        
+        if(diceOrg != null){
+            diceOutput += ")";
+            if(diceOrg.length-1 != diceOrg.indexOf(')')){
+                roll += outsidePerenth(roll, diceOrg.charAt(diceOrg.indexOf(')')+1), parseInt(diceOrg.charAt(diceOrg.indexOf(')')+2)));
+                diceOutput += diceOrg.charAt(diceOrg.indexOf(')')+1);
+                diceOutput += diceOrg.charAt(diceOrg.indexOf(')')+2);
+            }
+        }
         receivedMessage.channel.send(diceOutput+"]");
         receivedMessage.channel.send(roll);
 
     }
+    // if (receivedMessage.content.substr(0, 5) == "!test"){
+    //     //var dice = receivedMessage.content.substr(6);
+    //     // var dice = "(2d4)*3";
+        // if(diceArray[a].indexOf('(') != -1 && diceArray[a].indexOf(')') != -1){
+            
+        // }
+        
+    // }
 });
 client.login(auth.token);
 //receivedMessage.channel.send("Message received: " + receivedMessage.content);
