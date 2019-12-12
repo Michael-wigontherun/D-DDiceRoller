@@ -127,14 +127,6 @@ client.on('message', (receivedMessage) => {
         receivedMessage.channel.send(roll);
 
     }
-    // if (receivedMessage.content.substr(0, 5) == "!test"){
-    //     //var dice = receivedMessage.content.substr(6);
-    //     // var dice = "(2d4)*3";
-        // if(diceArray[a].indexOf('(') != -1 && diceArray[a].indexOf(')') != -1){
-            
-        // }
-        
-    // }
 });
 client.login(auth.token);
 //receivedMessage.channel.send("Message received: " + receivedMessage.content);
