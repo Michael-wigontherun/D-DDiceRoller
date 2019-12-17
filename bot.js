@@ -67,7 +67,27 @@ client.on('ready', () => {
 
 client.on('message', (receivedMessage) => {
     // Prevent bot from responding to its own messages
-    if (receivedMessage.content.substr(0, 5) == "!roll") {
+    if(receivedMessage.content == "!roll buried treasure" || receivedMessage.content == "!bt"){
+        var roll = makeRoll("100");
+        if(roll == 7 || roll == 77 || roll == 40){
+            receivedMessage.channel.send("[{100+100+100}]");
+            receivedMessage.channel.send("300");
+            return;
+        }
+        else{
+            var output = "[{";
+            var newRoll;
+            for(var i = 0; i < 3; i++){
+                newRoll = makeRoll("100");
+                roll += newRoll;
+                output += newRoll + ((i < 2) ? '+' : '');
+            }
+            receivedMessage.channel.send(output + "}]");
+            receivedMessage.channel.send(roll);
+        }
+        
+    }
+    else if (receivedMessage.content.substr(0, 5) == "!roll") {
         var dice = receivedMessage.content.substr(6);
         for(t = 0; t < dice.length; t++){
             if(dice.indexOf(" ") != -1){
