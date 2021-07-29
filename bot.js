@@ -69,11 +69,6 @@ client.on('message', (receivedMessage) => {
     // Prevent bot from responding to its own messages
     if(receivedMessage.content == "!roll buried treasure" || receivedMessage.content == "!bt"){
         var roll = makeRoll("100");
-        if(roll == 7 || roll == 77 || roll == 40){
-            receivedMessage.channel.send("[{100+100+100}]");
-            receivedMessage.channel.send("300");
-            return;
-        }
         else{
             var output = "[{";
             var newRoll;
